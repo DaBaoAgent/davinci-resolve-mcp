@@ -1,4 +1,6 @@
-# DaVinci Resolve MCP 服务器
+# Davinci
+
+DaVinci Resolve MCP 服务器
 
 [English](README.md) | 简体中文
 
@@ -15,6 +17,54 @@
 > 本翻译对应 v3.2.0 版 README。如与英文原版有出入，以 [英文原版](README.md) 为准。
 
 一个 Model Context Protocol (MCP) 服务器，让 AI 助手通过官方脚本 API 控制 DaVinci Resolve Studio（达芬奇）。它提供完整的 API 覆盖，外加带护栏的工作流助手，涵盖剪辑、媒体池整理、渲染设置、审阅标记、调色、Fusion、Fairlight、项目生命周期任务、扩展开发，以及不碰源媒体的媒体分析。
+
+## 项目状态
+
+本项目现统一命名为 **Davinci**，目标是在台式机上运行 DaVinci Resolve，并通过 MCP 实现自动化剪辑。
+
+### 笔记本上的已完成工作
+
+- 已将上游 MCP 服务克隆到本仓库。
+- 已在 `venv/` 创建 Python 3.12 虚拟环境。
+- 已安装 MCP SDK，并验证 `src/server.py` 可以正常导入。
+- 已在本机 Codex CLI 配置中注册 `davinci-resolve` MCP 服务。
+- 已确认 MCP 配置指向本仓库的虚拟环境和 `src/server.py`。
+
+### 当前限制
+
+- 笔记本未安装或运行 DaVinci Resolve，因此尚未完成实时时间线控制验证。
+- 本机没有 Resolve 脚本库，应用内桥接脚本暂未能安装。
+- 笔记本不是目标剪辑机；素材和实时 Resolve 操作应放在台式机上执行。
+
+## 台式机部署待办
+
+1. 从[官方页面](https://www.blackmagicdesign.com/event/davinciresolvedownload)安装 DaVinci Resolve 免费版或 Studio 版。
+2. 在台式机克隆本仓库，并在仓库目录打开 PowerShell。
+3. 安装并注册 MCP：
+
+   ```powershell
+   python install.py --clients codex
+   ```
+
+4. Studio 版：启动 Resolve，在 **Preferences > General > External scripting using** 中选择 **Local**，然后重新运行安装器。
+5. 免费版：安装应用内桥接并重启 Resolve：
+
+   ```powershell
+   python scripts/install_resolve_bridge.py
+   ```
+
+   然后在 Resolve 中运行 `Workspace > Scripts > resolve_bridge`。
+
+6. 重启 Codex，用列出 Resolve 项目等只读请求验证连接。
+7. 先用可丢弃的测试项目验证素材导入、时间线剪辑、字幕、渲染和恢复流程，再处理重要素材。
+
+### 下一步任务
+
+- 在台式机安装 Resolve，并记录确切版本号。
+- 完成 MCP 实时连接和只读能力检查。
+- 如果使用免费版，验证台式机上的应用内桥接。
+- 完成一次端到端样片剪辑并记录可用流程。
+- 补充台式机硬件信息和常见故障排查说明。
 
 [![本地控制面板](https://raw.githubusercontent.com/samuelgursky/davinci-resolve-mcp/main/docs/images/control-panel/01-overview.png)](docs/guides/control-panel.md)
 

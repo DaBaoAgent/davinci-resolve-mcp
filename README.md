@@ -1,4 +1,6 @@
-# DaVinci Resolve MCP Server
+# Davinci
+
+DaVinci Resolve MCP Server
 
 English | [简体中文](README.zh-CN.md)
 
@@ -13,6 +15,54 @@ English | [简体中文](README.zh-CN.md)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A Model Context Protocol (MCP) server that lets AI assistants control DaVinci Resolve Studio through the official Scripting API. It provides full API coverage plus guarded workflow helpers for editing, media pool organization, render setup, review markers, grading, Fusion, Fairlight, project lifecycle tasks, extension authoring, and source-safe media analysis.
+
+## Project status
+
+This repository is being prepared as **Davinci**, a desktop-hosted DaVinci Resolve automation project.
+
+### Completed on the development laptop
+
+- Cloned the upstream MCP server into this repository.
+- Created the Python 3.12 virtual environment at `venv/`.
+- Installed the MCP SDK and verified that `src/server.py` imports successfully.
+- Registered the `davinci-resolve` MCP server in the local Codex CLI configuration.
+- Confirmed the server entry points to this repository's virtual environment and `src/server.py`.
+
+### Current limitations
+
+- DaVinci Resolve is not installed or running on this laptop, so live timeline control has not yet been verified.
+- The Resolve scripting API library was not available, so the in-app bridge could not be installed here.
+- The laptop is not the target editing machine; media and live Resolve work should run on the desktop computer.
+
+## Desktop deployment checklist
+
+1. Install DaVinci Resolve Free or Studio from the [official download page](https://www.blackmagicdesign.com/event/davinciresolvedownload).
+2. Clone this repository on the desktop and open a PowerShell window in the repository folder.
+3. Install and register the MCP server:
+
+   ```powershell
+   python install.py --clients codex
+   ```
+
+4. For Studio, open Resolve and set **Preferences > General > External scripting using** to **Local**, then rerun the installer.
+5. For the free edition, install the in-app bridge and restart Resolve:
+
+   ```powershell
+   python scripts/install_resolve_bridge.py
+   ```
+
+   Then run `Workspace > Scripts > resolve_bridge` in Resolve.
+
+6. Restart Codex and verify the connection with a harmless read-only request such as listing Resolve projects.
+7. Import a disposable sample project and validate media ingest, timeline edits, subtitles, rendering, and recovery behavior before using important footage.
+
+### Next tasks
+
+- Install Resolve on the desktop and record the exact Resolve build.
+- Complete live MCP connection and read-only capability checks.
+- Validate the free-edition bridge on the desktop, if using the free edition.
+- Run an end-to-end sample edit and document the supported workflow.
+- Add desktop-specific troubleshooting notes and tested hardware details.
 
 [![Local control panel](https://raw.githubusercontent.com/samuelgursky/davinci-resolve-mcp/main/docs/images/control-panel/01-overview.png)](docs/guides/control-panel.md)
 
